@@ -23,7 +23,7 @@ message(STATUS "OpenSSL Libraries: ${OPENSSL_LIBRARIES}")
 add_library(help_menu src/help_menu.cpp)  # Crear la biblioteca help_menu
 add_library(init src/comp/init.cpp)       # Crear la biblioteca init
 add_library(hash_tool src/hash/hash_tool.cpp)  # Crear la biblioteca hash_tool
-add_library(server src/server/server.cpp)  # Crear la biblioteca hash_tool
+add_library(server src/server/server.cpp)  # Crear la biblioteca server
 
 # Vincular OpenSSL a hash_tool
 target_link_libraries(hash_tool OpenSSL::SSL OpenSSL::Crypto)
