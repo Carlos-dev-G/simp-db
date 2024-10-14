@@ -1,0 +1,2 @@
+C:\msys64\mingw64\bin\ar.exe qc libinit.a CMakeFiles/init.dir/src/comp/init.cpp.obj
+C:\msys64\mingw64\bin\ranlib.exe libinit.a

@@ -1,0 +1,2 @@
+C:\msys64\mingw64\bin\ar.exe qc libhash_tool.a CMakeFiles/hash_tool.dir/src/hash/hash_tool.cpp.obj
+C:\msys64\mingw64\bin\ranlib.exe libhash_tool.a

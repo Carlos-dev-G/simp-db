@@ -1,0 +1,2 @@
+C:\msys64\mingw64\bin\ar.exe qc libhelp_menu.a CMakeFiles/help_menu.dir/src/help_menu.cpp.obj
+C:\msys64\mingw64\bin\ranlib.exe libhelp_menu.a

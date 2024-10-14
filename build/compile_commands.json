@@ -1,0 +1,26 @@
+[
+{
+  "directory": "C:/Users/baa4t/Documents/simp-db/build",
+  "command": "C:\\msys64\\mingw64\\bin\\g++.exe -DPLATFORM_WINDOWS @CMakeFiles/help_menu.dir/includes_CXX.rsp  -static -g -std=c++17 -o CMakeFiles\\help_menu.dir\\src\\help_menu.cpp.obj -c C:\\Users\\baa4t\\Documents\\simp-db\\src\\help_menu.cpp",
+  "file": "C:/Users/baa4t/Documents/simp-db/src/help_menu.cpp",
+  "output": "CMakeFiles/help_menu.dir/src/help_menu.cpp.obj"
+},
+{
+  "directory": "C:/Users/baa4t/Documents/simp-db/build",
+  "command": "C:\\msys64\\mingw64\\bin\\g++.exe -DPLATFORM_WINDOWS @CMakeFiles/init.dir/includes_CXX.rsp  -static -g -std=c++17 -o CMakeFiles\\init.dir\\src\\comp\\init.cpp.obj -c C:\\Users\\baa4t\\Documents\\simp-db\\src\\comp\\init.cpp",
+  "file": "C:/Users/baa4t/Documents/simp-db/src/comp/init.cpp",
+  "output": "CMakeFiles/init.dir/src/comp/init.cpp.obj"
+},
+{
+  "directory": "C:/Users/baa4t/Documents/simp-db/build",
+  "command": "C:\\msys64\\mingw64\\bin\\g++.exe -DPLATFORM_WINDOWS @CMakeFiles/hash_tool.dir/includes_CXX.rsp  -static -g -std=c++17 -o CMakeFiles\\hash_tool.dir\\src\\hash\\hash_tool.cpp.obj -c C:\\Users\\baa4t\\Documents\\simp-db\\src\\hash\\hash_tool.cpp",
+  "file": "C:/Users/baa4t/Documents/simp-db/src/hash/hash_tool.cpp",
+  "output": "CMakeFiles/hash_tool.dir/src/hash/hash_tool.cpp.obj"
+},
+{
+  "directory": "C:/Users/baa4t/Documents/simp-db/build",
+  "command": "C:\\msys64\\mingw64\\bin\\g++.exe -DPLATFORM_WINDOWS @CMakeFiles/simp-db.dir/includes_CXX.rsp  -static -g -std=c++17 -o CMakeFiles\\simp-db.dir\\src\\main.cpp.obj -c C:\\Users\\baa4t\\Documents\\simp-db\\src\\main.cpp",
+  "file": "C:/Users/baa4t/Documents/simp-db/src/main.cpp",
+  "output": "CMakeFiles/simp-db.dir/src/main.cpp.obj"
+}
+]
