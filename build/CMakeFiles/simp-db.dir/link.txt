@@ -1,3 +1,0 @@
-C:\msys64\mingw64\bin\cmake.exe -E rm -f CMakeFiles\simp-db.dir/objects.a
-C:\msys64\mingw64\bin\ar.exe qc CMakeFiles\simp-db.dir/objects.a @CMakeFiles\simp-db.dir\objects1.rsp
-C:\msys64\mingw64\bin\g++.exe  -static -g -Wl,--whole-archive CMakeFiles\simp-db.dir/objects.a -Wl,--no-whole-archive -o simp-db.exe -Wl,--out-implib,libsimp-db.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\simp-db.dir\linkLibs.rsp

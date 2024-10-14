@@ -1,6 +1,0 @@
-C:/Users/baa4t/Documents/simp-db/build/CMakeFiles/help_menu.dir
-C:/Users/baa4t/Documents/simp-db/build/CMakeFiles/init.dir
-C:/Users/baa4t/Documents/simp-db/build/CMakeFiles/hash_tool.dir
-C:/Users/baa4t/Documents/simp-db/build/CMakeFiles/simp-db.dir
-C:/Users/baa4t/Documents/simp-db/build/CMakeFiles/edit_cache.dir
-C:/Users/baa4t/Documents/simp-db/build/CMakeFiles/rebuild_cache.dir
