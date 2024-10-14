@@ -23,6 +23,7 @@
 // Función que manejará la comunicación con el cliente
 void HandleCliente(int cliente_socket)
 {
+    using json = nlohmann::json;
     std::string mensaje;        // Variable para almacenar el mensaje recibido
     char buffer_temporal[1024]; // Buffer temporal para recibir datos
     int bytes_recibidos;        // Número de bytes recibidos
@@ -46,6 +47,9 @@ void HandleCliente(int cliente_socket)
         // Pasar el mensaje de char a std::string
         mensaje.assign(buffer_temporal, bytes_recibidos);
         std::cout << "Mensaje recibido: " << mensaje << std::endl;
+
+        std::string respuesta = "1";
+        send(cliente_socket, respuesta.c_str(), respuesta.size(), 0);
     }
 
     // Cerrar el socket del cliente al finalizar la comunicación
