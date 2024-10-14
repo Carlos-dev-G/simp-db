@@ -10,10 +10,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)     # Requerir el estándar
 set(CMAKE_CXX_EXTENSIONS OFF)           # Desactivar extensiones específicas del compilador
 
 # Incluir directorios
-include_directories(include)            # Incluir el directorio de encabezados
+include_directories(include)             # Incluir el directorio de encabezados
+include_directories(${CMAKE_SOURCE_DIR}/path/to/nlohmann_json) # Ruta a la biblioteca de JSON
 
 # Buscar OpenSSL
-find_package(OpenSSL REQUIRED)          # Buscar OpenSSL (REQUIRED significa que es obligatorio)
+find_package(OpenSSL REQUIRED)           # Buscar OpenSSL (REQUIRED significa que es obligatorio)
 
 # Mostrar rutas de OpenSSL (para verificación)
 message(STATUS "OpenSSL Include Dir: ${OPENSSL_INCLUDE_DIR}")
@@ -21,15 +22,15 @@ message(STATUS "OpenSSL Libraries: ${OPENSSL_LIBRARIES}")
 
 # Agregar las bibliotecas
 add_library(help_menu src/help_menu.cpp)  # Crear la biblioteca help_menu
-add_library(init src/comp/init.cpp)       # Crear la biblioteca init
+add_library(init src/comp/init.cpp)        # Crear la biblioteca init
 add_library(hash_tool src/hash/hash_tool.cpp)  # Crear la biblioteca hash_tool
-add_library(server src/server/server.cpp)  # Crear la biblioteca server
+add_library(server src/server/server.cpp)   # Crear la biblioteca server
 
 # Vincular OpenSSL a hash_tool
 target_link_libraries(hash_tool OpenSSL::SSL OpenSSL::Crypto)
 
 # Crear el ejecutable
-add_executable(simp-db src/main.cpp)     # Crear el ejecutable con el nombre "simp-db"
+add_executable(simp-db src/main.cpp)      # Crear el ejecutable con el nombre "simp-db"
 
 # Vincular las bibliotecas al ejecutable
 target_link_libraries(simp-db help_menu init hash_tool server)

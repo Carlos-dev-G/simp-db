@@ -12,6 +12,7 @@
 
 // Librerías comunes
 #include "server/server.hpp"
+#include <nlohmann/json.hpp>
 #include <iostream>
 #include <thread>
 #include <vector>
@@ -20,20 +21,23 @@
 #include <fstream>
 
 // Función que manejará la comunicación con el cliente
-void HandleCliente(int cliente_socket) {
-    std::string mensaje;           // Variable para almacenar el mensaje recibido
-    char buffer_temporal[1024];    // Buffer temporal para recibir datos
-    int bytes_recibidos;           // Número de bytes recibidos
+void HandleCliente(int cliente_socket)
+{
+    std::string mensaje;        // Variable para almacenar el mensaje recibido
+    char buffer_temporal[1024]; // Buffer temporal para recibir datos
+    int bytes_recibidos;        // Número de bytes recibidos
 
     // Bucle principal para recibir los datos del cliente
-    while (true) {
+    while (true)
+    {
         // Limpiar el buffer
         memset(buffer_temporal, 0, sizeof(buffer_temporal));
 
         // Recibir datos del cliente
         bytes_recibidos = recv(cliente_socket, buffer_temporal, sizeof(buffer_temporal) - 1, 0);
 
-        if (bytes_recibidos <= 0) {
+        if (bytes_recibidos <= 0)
+        {
             // Si no se reciben datos o hay un error, salir del bucle
             std::cout << "Cliente desconectado o error en la recepción." << std::endl;
             break;
@@ -54,30 +58,37 @@ void HandleCliente(int cliente_socket) {
 
 // Esta función inicializa Winsock para Windows
 #ifdef _WIN32
-void WinsockStart() {
+void WinsockStart()
+{
     WSADATA WinsockData;
-    if (WSAStartup(MAKEWORD(2, 2), &WinsockData) != 0) {
+    if (WSAStartup(MAKEWORD(2, 2), &WinsockData) != 0)
+    {
         std::cerr << "Error al inicializar Winsock" << std::endl;
         exit(1);
     }
 }
 #endif
 
-int Servidor() {
+int Servidor()
+{
     int PORT;
     std::filesystem::path configuracion_path = std::filesystem::path("simp-db") / "config" / "config.json";
 
-    if (!std::filesystem::exists(configuracion_path)) {
+    if (!std::filesystem::exists(configuracion_path))
+    {
         std::cout << "La configuracion no fue iniciada" << std::endl;
         std::cout << "Inicie: -i or init" << std::endl;
-        exit(1);
-    } else {
+        return -1;
+    }
+    else
+    {
         // Instancia para usar json
         using json = nlohmann::json;
 
         // Leer el archivo
         std::ifstream configuracion_json(configuracion_path);
-        if (!configuracion_json.is_open()) {
+        if (!configuracion_json.is_open())
+        {
             std::cerr << "Error al abrir el archivo de configuracion" << std::endl;
             return 1;
         }
@@ -94,7 +105,8 @@ int Servidor() {
 
     // Crear el socket que escuchará las conexiones
     int socket_de_escucha = socket(AF_INET, SOCK_STREAM, 0);
-    if (socket_de_escucha < 0) {
+    if (socket_de_escucha < 0)
+    {
         std::cerr << "Error al crear el socket" << std::endl;
         return -1;
     }
@@ -106,25 +118,29 @@ int Servidor() {
     server_addr.sin_addr.s_addr = INADDR_ANY; // Aceptar conexiones en cualquier interfaz
 
     // Enlazar el socket a la dirección IP y el puerto
-    if (bind(socket_de_escucha, (sockaddr *)&server_addr, sizeof(server_addr)) < 0) {
+    if (bind(socket_de_escucha, (sockaddr *)&server_addr, sizeof(server_addr)) < 0)
+    {
         std::cerr << "Error al enlazar el socket" << std::endl;
         return -1;
     }
 
     // Escuchar las conexiones
-    if (listen(socket_de_escucha, SOMAXCONN) < 0) {
+    if (listen(socket_de_escucha, SOMAXCONN) < 0)
+    {
         std::cerr << "Error al escuchar en el socket" << std::endl;
         return -1;
     }
 
     std::cout << "Servidor escuchando en el puerto " << PORT << "..." << std::endl;
 
-    while (true) {
+    while (true)
+    {
         // Aceptar nuevas conexiones
         sockaddr_in cliente_addr;
         socklen_t cliente_size = sizeof(cliente_addr);
         int socket_cliente = accept(socket_de_escucha, (sockaddr *)&cliente_addr, &cliente_size);
-        if (socket_cliente < 0) {
+        if (socket_cliente < 0)
+        {
             std::cerr << "Error al aceptar la conexión" << std::endl;
             continue;
         }
@@ -138,7 +154,9 @@ int Servidor() {
 #ifdef _WIN32
     closesocket(socket_de_escucha);
     WSACleanup(); // Limpiar Winsock
+    return 0;
 #else
     close(socket_de_escucha);
+    return 0;
 #endif
 }
