@@ -2,6 +2,7 @@
 #include <cstring>
 #include "help_menu.cpp"
 #include "comp/init.cpp"
+#include "server/server.cpp"
 
 int main(int argc, char *argv[])
 {
@@ -18,7 +19,7 @@ int main(int argc, char *argv[])
         }
         else if (strcmp(argv[1], "-s") == 0 || strcmp(argv[1], "start") == 0)
         {
-            ///
+            Servidor();
         }
         else
         {

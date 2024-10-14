@@ -23,6 +23,7 @@ message(STATUS "OpenSSL Libraries: ${OPENSSL_LIBRARIES}")
 add_library(help_menu src/help_menu.cpp)  # Crear la biblioteca help_menu
 add_library(init src/comp/init.cpp)       # Crear la biblioteca init
 add_library(hash_tool src/hash/hash_tool.cpp)  # Crear la biblioteca hash_tool
+add_library(server src/server/server.cpp)  # Crear la biblioteca hash_tool
 
 # Vincular OpenSSL a hash_tool
 target_link_libraries(hash_tool OpenSSL::SSL OpenSSL::Crypto)
@@ -31,11 +32,12 @@ target_link_libraries(hash_tool OpenSSL::SSL OpenSSL::Crypto)
 add_executable(simp-db src/main.cpp)     # Crear el ejecutable con el nombre "simp-db"
 
 # Vincular las bibliotecas al ejecutable
-target_link_libraries(simp-db help_menu init hash_tool)
+target_link_libraries(simp-db help_menu init hash_tool server)
 
 if(WIN32)
     # Opciones específicas para Windows
     add_definitions(-DPLATFORM_WINDOWS)
+    target_link_libraries(simp-db ws2_32)  # Enlazar la biblioteca de sockets de Windows
 elseif(UNIX)
     # Opciones específicas para Linux
     add_definitions(-DPLATFORM_UNIX)
