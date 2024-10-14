@@ -25,6 +25,7 @@ add_library(help_menu src/help_menu.cpp)  # Crear la biblioteca help_menu
 add_library(init src/comp/init.cpp)        # Crear la biblioteca init
 add_library(hash_tool src/hash/hash_tool.cpp)  # Crear la biblioteca hash_tool
 add_library(server src/server/server.cpp)   # Crear la biblioteca server
+add_library(eval src/eval/eval.cpp)   # Crear la biblioteca eval
 
 # Vincular OpenSSL a hash_tool
 target_link_libraries(hash_tool OpenSSL::SSL OpenSSL::Crypto)
@@ -33,7 +34,7 @@ target_link_libraries(hash_tool OpenSSL::SSL OpenSSL::Crypto)
 add_executable(simp-db src/main.cpp)      # Crear el ejecutable con el nombre "simp-db"
 
 # Vincular las bibliotecas al ejecutable
-target_link_libraries(simp-db help_menu init hash_tool server)
+target_link_libraries(simp-db help_menu init hash_tool server eval)
 
 if(WIN32)
     # Opciones específicas para Windows

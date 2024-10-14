@@ -13,6 +13,7 @@
 // Librerías comunes
 #include "server/server.hpp"
 #include <nlohmann/json.hpp>
+#include "eval/eval.hpp"
 #include <iostream>
 #include <thread>
 #include <vector>
@@ -25,7 +26,7 @@ void HandleCliente(int cliente_socket)
 {
     using json = nlohmann::json;
     std::string mensaje;        // Variable para almacenar el mensaje recibido
-    char buffer_temporal[1024]; // Buffer temporal para recibir datos
+    char buffer_temporal[4096]; // Buffer temporal para recibir datos
     int bytes_recibidos;        // Número de bytes recibidos
 
     // Bucle principal para recibir los datos del cliente
@@ -48,8 +49,10 @@ void HandleCliente(int cliente_socket)
         mensaje.assign(buffer_temporal, bytes_recibidos);
         std::cout << "Mensaje recibido: " << mensaje << std::endl;
 
-        std::string respuesta = "1";
-        send(cliente_socket, respuesta.c_str(), respuesta.size(), 0);
+        Eval evaluacion;
+        std::string Mensje = evaluacion.evaluar_querry(mensaje);
+
+        send(cliente_socket, Mensje.c_str(), Mensje.size(), 0);
     }
 
     // Cerrar el socket del cliente al finalizar la comunicación
