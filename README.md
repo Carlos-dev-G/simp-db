@@ -102,3 +102,5 @@ Aquí tienes una tabla con comandos que incluyen ejemplos de JSON más grandes y
 
 
 [OpenSSL Windows](https://slproweb.com/products/Win32OpenSSL.html)
+[Como instalar en Windows](https://github.com/Carlos-dev-G/simp-db/blob/main/README_WINDOWS.MD)
+[Como instalar en linux](https://github.com/Carlos-dev-G/simp-db/blob/main/README_LINUX.MD)
