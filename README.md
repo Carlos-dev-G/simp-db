@@ -1,8 +1,10 @@
 # simp-db
 Una simple base de datos (TCP) y JSON
 
-- Nota cuando se le pasa un json limpia los espacios en blanco
-- Ej: INSERTAR MI_TABLA {"CARLITOS":"12"}
+![C++](https://img.shields.io/badge/C%2B%2B-17-blue.svg)![License](https://img.shields.io/badge/license-MIT-brightgreen.svg) ![URUGUAY](https://img.shields.io/badge/URUGUAY-red.svg)
+
+- Nota: cuando se le pasa un JSON, limpia los espacios en blanco.
+- Ej: `INSERTAR MI_TABLA {"CARLITOS":"12"}`
 
 ## Comandos Disponibles
 
@@ -56,7 +58,8 @@ OBTENER DENTRO <directorio> <nombre_tabla>
 -- Obtiene todo el contenido de la tabla <nombre_tabla>.json dentro del directorio especificado.
 
 ```
-Aquí tienes una tabla con comandos que incluyen ejemplos de JSON más grandes y sin espacios en blanco, como solicitaste.
+
+Aquí tienes una tabla con comandos que incluyen ejemplos de JSON más grandes y sin espacios en blanco.
 
 ### Ejemplo de Uso de Comandos con JSON Grandes
 
