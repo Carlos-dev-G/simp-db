@@ -99,3 +99,6 @@ Aquí tienes una tabla con comandos que incluyen ejemplos de JSON más grandes y
 | Requisito            | Descripción                                      |
 |----------------------|--------------------------------------------------|
 | **OpenSSL**          | Necesario para el funcionamiento                 |
+
+
+[OpenSSL Windows](https://slproweb.com/products/Win32OpenSSL.html)
