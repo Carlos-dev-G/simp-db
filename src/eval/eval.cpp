@@ -108,10 +108,20 @@ std::string Eval::BORRAR(std::vector<std::string> Argumentos)
         return respuesta.dump();
     }
 
-    // Verificar si el segundo argumento es "TABLA"
+    fs::path archivoPath;
+    fs::path dirPath;
+
+    // Determinar el tipo de eliminación (TABLA o DIRECTORIO)
     if (Argumentos[1] == "TABLA")
     {
-        fs::path archivoPath = fs::path("simp-db") / "data" / (Argumentos[2] + ".json");
+        if (Argumentos[2] == "DENTRO" && Argumentos.size() > 4)
+        {
+            archivoPath = fs::path("simp-db") / "data" / Argumentos[3] / (Argumentos[4] + ".json");
+        }
+        else
+        {
+            archivoPath = fs::path("simp-db") / "data" / (Argumentos[2] + ".json");
+        }
 
         try
         {
@@ -132,27 +142,24 @@ std::string Eval::BORRAR(std::vector<std::string> Argumentos)
             respuesta["message"] = "Error al borrar la TABLA: " + std::string(e.what());
         }
     }
-    // Verificar si el segundo argumento es "DIRECTORIO"
     else if (Argumentos[1] == "DIRECTORIO")
     {
-        fs::path dirPath = fs::path("simp-db") / "data" / Argumentos[2];
+        dirPath = fs::path("simp-db") / "data" / Argumentos[2];
 
         try
         {
             if (Argumentos.size() > 3 && Argumentos[3] == "T")
             {
-                // Borrar el directorio y su contenido
                 fs::remove_all(dirPath);
                 respuesta["status"] = "success";
                 respuesta["message"] = "DIRECTORIO y su contenido borrados.";
             }
             else
             {
-                // Borrar solo el directorio (debe estar vacío)
                 if (fs::remove(dirPath))
                 {
                     respuesta["status"] = "success";
-                    respuesta["message"] = "DIRECTORIO borrada.";
+                    respuesta["message"] = "DIRECTORIO borrado.";
                 }
                 else
                 {
@@ -164,7 +171,7 @@ std::string Eval::BORRAR(std::vector<std::string> Argumentos)
         catch (const std::exception &e)
         {
             respuesta["status"] = "fallido";
-            respuesta["message"] = "Error al borrar el DIRECTORIO: ";
+            respuesta["message"] = "Error al borrar el DIRECTORIO: " + std::string(e.what());
         }
     }
     else
