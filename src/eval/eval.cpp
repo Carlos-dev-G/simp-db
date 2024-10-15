@@ -10,15 +10,9 @@
 namespace fs = std::filesystem;
 using json = nlohmann::json;
 
-#include <filesystem>
-#include <fstream>
-#include <nlohmann/json.hpp>
-namespace fs = std::filesystem;
-using json = nlohmann::json;
-
 std::string Eval::CREAR(std::vector<std::string> Argumentos)
 {
-    json respuesta; // Declarar el objeto JSON al principio
+    json respuesta;
 
     // Verificar que hay suficientes argumentos
     if (Argumentos.size() < 3)
@@ -37,18 +31,18 @@ std::string Eval::CREAR(std::vector<std::string> Argumentos)
             if (fs::create_directory(folderPath))
             {
                 respuesta["status"] = "success";
-                respuesta["message"] = "Directorio creado";
+                respuesta["message"] = "Directorio creado.";
             }
             else
             {
                 respuesta["status"] = "error";
-                respuesta["message"] = "No se pudo crear el directorio";
+                respuesta["message"] = "No se pudo crear el directorio.";
             }
         }
         else
         {
             respuesta["status"] = "error";
-            respuesta["message"] = "El directorio ya existe";
+            respuesta["message"] = "El directorio ya existe.";
         }
     }
     else if (Argumentos[1] == "TABLA")
@@ -63,7 +57,7 @@ std::string Eval::CREAR(std::vector<std::string> Argumentos)
         else
         {
             if (Argumentos.size() < 5)
-            { // Verifica que haya suficientes argumentos
+            {
                 respuesta["status"] = "error";
                 respuesta["message"] = "Número insuficiente de argumentos para crear en DENTRO.";
                 return respuesta.dump();
@@ -78,19 +72,19 @@ std::string Eval::CREAR(std::vector<std::string> Argumentos)
             if (outFile.is_open())
             {
                 respuesta["status"] = "success";
-                respuesta["message"] = "Archivo creado";
-                outFile.close(); // Cierra el archivo
+                respuesta["message"] = "Archivo creado.";
+                outFile.close();
             }
             else
             {
                 respuesta["status"] = "error";
-                respuesta["message"] = "No se pudo crear el archivo";
+                respuesta["message"] = "No se pudo crear el archivo.";
             }
         }
         else
         {
             respuesta["status"] = "error";
-            respuesta["message"] = "El archivo ya existe";
+            respuesta["message"] = "El archivo ya existe.";
         }
     }
     else
@@ -102,11 +96,83 @@ std::string Eval::CREAR(std::vector<std::string> Argumentos)
     return respuesta.dump();
 }
 
-std::string Eval::BORRAR()
+std::string Eval::BORRAR(std::vector<std::string> Argumentos)
 {
     json respuesta;
-    respuesta["status"] = "fallido";
-    respuesta["message"] = "La funcion BORRAR no esta implementada.";
+
+    // Verificar que haya suficientes argumentos
+    if (Argumentos.size() < 3)
+    {
+        respuesta["status"] = "fallido";
+        respuesta["message"] = "Argumentos insuficientes.";
+        return respuesta.dump();
+    }
+
+    // Verificar si el segundo argumento es "TABLA"
+    if (Argumentos[1] == "TABLA")
+    {
+        fs::path archivoPath = fs::path("simp-db") / "data" / (Argumentos[2] + ".json");
+
+        try
+        {
+            if (fs::remove(archivoPath))
+            {
+                respuesta["status"] = "success";
+                respuesta["message"] = "TABLA borrada.";
+            }
+            else
+            {
+                respuesta["status"] = "fallido";
+                respuesta["message"] = "La TABLA no existe.";
+            }
+        }
+        catch (const std::exception &e)
+        {
+            respuesta["status"] = "fallido";
+            respuesta["message"] = "Error al borrar la TABLA: " + std::string(e.what());
+        }
+    }
+    // Verificar si el segundo argumento es "DIRECTORIO"
+    else if (Argumentos[1] == "DIRECTORIO")
+    {
+        fs::path dirPath = fs::path("simp-db") / "data" / Argumentos[2];
+
+        try
+        {
+            if (Argumentos.size() > 3 && Argumentos[3] == "T")
+            {
+                // Borrar el directorio y su contenido
+                fs::remove_all(dirPath);
+                respuesta["status"] = "success";
+                respuesta["message"] = "DIRECTORIO y su contenido borrados.";
+            }
+            else
+            {
+                // Borrar solo el directorio (debe estar vacío)
+                if (fs::remove(dirPath))
+                {
+                    respuesta["status"] = "success";
+                    respuesta["message"] = "DIRECTORIO borrada.";
+                }
+                else
+                {
+                    respuesta["status"] = "fallido";
+                    respuesta["message"] = "El DIRECTORIO no existe o no está vacío.";
+                }
+            }
+        }
+        catch (const std::exception &e)
+        {
+            respuesta["status"] = "fallido";
+            respuesta["message"] = "Error al borrar el DIRECTORIO: ";
+        }
+    }
+    else
+    {
+        respuesta["status"] = "fallido";
+        respuesta["message"] = "Comando no reconocido.";
+    }
+
     return respuesta.dump();
 }
 
@@ -114,7 +180,7 @@ std::string Eval::ACTUALIZAR()
 {
     json respuesta;
     respuesta["status"] = "fallido";
-    respuesta["message"] = "La función ACTUALIZAR no esta implementada.";
+    respuesta["message"] = "La función ACTUALIZAR no está implementada.";
     return respuesta.dump();
 }
 
@@ -122,7 +188,7 @@ std::string Eval::OBTENER()
 {
     json respuesta;
     respuesta["status"] = "fallido";
-    respuesta["message"] = "La funcion OBTENER no esta implementada.";
+    respuesta["message"] = "La función OBTENER no está implementada.";
     return respuesta.dump();
 }
 
@@ -133,7 +199,7 @@ std::string Eval::evaluar_querry(std::string querry)
     if (querry.empty())
     {
         respuesta["status"] = "fallido";
-        respuesta["message"] = "Consulta vacia";
+        respuesta["message"] = "Consulta vacía.";
         return respuesta.dump();
     }
 
@@ -149,26 +215,35 @@ std::string Eval::evaluar_querry(std::string querry)
     if (inputs.empty())
     {
         respuesta["status"] = "fallido";
-        respuesta["message"] = "La querry vino fallida";
+        respuesta["message"] = "La querry vino fallida.";
         return respuesta.dump();
     }
 
     if (inputs[0] == "CREAR")
     {
-        if (inputs.size() > 3)
+        if (inputs.size() >= 3)
         {
             return CREAR(inputs);
         }
         else
         {
             respuesta["status"] = "error";
-            respuesta["message"] = "Error al crear: Querry (CREAR Nombre)";
+            respuesta["message"] = "Error al crear: Querry (Consultar Querry).";
             return respuesta.dump();
         }
     }
     else if (inputs[0] == "BORRAR")
     {
-        return BORRAR();
+        if (inputs.size() >= 2)
+        {
+            return BORRAR(inputs);
+        }
+        else
+        {
+            respuesta["status"] = "error";
+            respuesta["message"] = "Error al borrar: Querry (Consultar Querry).";
+            return respuesta.dump();
+        }
     }
     else if (inputs[0] == "ACTUALIZAR")
     {
