@@ -85,3 +85,17 @@ Aquí tienes una tabla con comandos que incluyen ejemplos de JSON más grandes y
 5. **Obtener Datos**: Se obtienen los datos de `MI_TABLA`.
 6. **Actualizar Datos**: Se actualiza el registro de `Carlos` con un nuevo interés.
 7. **Borrar Tabla**: Finalmente, se eliminan la tabla y el directorio.
+
+
+### Requisitos de Compilación
+
+| Requisito            | Descripción                                      |
+|----------------------|--------------------------------------------------|
+| **OpenSSL**          | Necesario para la vinculación                    |
+| **nlohmann_json**    | Biblioteca para manejar JSON                     |
+
+### Requisitos de Ejecución
+
+| Requisito            | Descripción                                      |
+|----------------------|--------------------------------------------------|
+| **OpenSSL**          | Necesario para el funcionamiento                 |
