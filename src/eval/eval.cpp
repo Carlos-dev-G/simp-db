@@ -183,19 +183,160 @@ std::string Eval::BORRAR(std::vector<std::string> Argumentos)
     return respuesta.dump();
 }
 
-std::string Eval::ACTUALIZAR()
+std::string Eval::INSERTAR(std::vector<std::string> Argumentos)
 {
-    json respuesta;
-    respuesta["status"] = "fallido";
-    respuesta["message"] = "La función ACTUALIZAR no está implementada.";
+    nlohmann::json respuesta;
+    fs::path file_path;
+    nlohmann::json datos;
+
+    // Verificar que hay suficientes argumentos
+    if (Argumentos.size() < 3)
+    {
+        respuesta["status"] = "error";
+        respuesta["message"] = "Número insuficiente de argumentos.";
+        return respuesta.dump();
+    }
+
+    // Determinar la ruta dependiendo de si el archivo está en un directorio o en la raíz
+    if (Argumentos.size() == 3) // Archivo en la raíz
+    {
+        file_path = fs::path("simp-db") / "data" / (Argumentos[2] + ".json");
+    }
+    else if (Argumentos.size() == 4) // Archivo dentro de un directorio
+    {
+        file_path = fs::path("simp-db") / "data" / Argumentos[3] / (Argumentos[4] + ".json");
+    }
+    else
+    {
+        respuesta["status"] = "error";
+        respuesta["message"] = "Número inválido de argumentos.";
+        return respuesta.dump();
+    }
+
+    if (fs::exists(file_path))
+    {
+        respuesta["status"] = "error";
+        respuesta["message"] = "La tabla no existe.";
+    }
+    else
+    {
+    }
+
     return respuesta.dump();
 }
 
-std::string Eval::OBTENER()
+std::string Eval::ACTUALIZAR(std::vector<std::string> Argumentos)
 {
     json respuesta;
-    respuesta["status"] = "fallido";
-    respuesta["message"] = "La función OBTENER no está implementada.";
+    fs::path file_path;
+
+    // Verificar que hay suficientes argumentos
+    if (Argumentos.size() < 3)
+    {
+        respuesta["status"] = "error";
+        respuesta["message"] = "Número insuficiente de argumentos.";
+        return respuesta.dump();
+    }
+
+    // Determinar la ruta dependiendo de si el archivo está en un directorio o en la raíz
+    if (Argumentos.size() == 3) // Archivo en la raíz
+    {
+        file_path = fs::path("simp-db") / "data" / (Argumentos[2] + ".json");
+    }
+    else if (Argumentos.size() == 4) // Archivo dentro de un directorio
+    {
+        file_path = fs::path("simp-db") / "data" / Argumentos[3] / (Argumentos[4] + ".json");
+    }
+    else
+    {
+        respuesta["status"] = "error";
+        respuesta["message"] = "Número inválido de argumentos.";
+        return respuesta.dump();
+    }
+
+    // Verificar si el archivo existe
+    if (!fs::exists(file_path))
+    {
+        respuesta["status"] = "error";
+        respuesta["message"] = "La tabla no existe.";
+        return respuesta.dump();
+    }
+
+    // Actualizar el contenido del archivo
+    std::ofstream outFile(file_path);
+    if (outFile.is_open())
+    {
+        // Supongamos que Argumentos[2] contiene el nuevo JSON en forma de string
+        json nuevoContenido = json::parse(Argumentos.back()); // El último argumento es el nuevo contenido en JSON
+        outFile << nuevoContenido.dump(4);                    // Escribir el nuevo contenido formateado
+        outFile.close();
+
+        respuesta["status"] = "success";
+        respuesta["message"] = "Tabla actualizada con éxito.";
+    }
+    else
+    {
+        respuesta["status"] = "error";
+        respuesta["message"] = "No se pudo abrir el archivo para actualizar.";
+    }
+
+    return respuesta.dump();
+}
+
+std::string Eval::OBTENER(std::vector<std::string> Argumentos)
+{
+    json respuesta;
+    fs::path file_path;
+
+    // Verificar que hay suficientes argumentos
+    if (Argumentos.size() < 3)
+    {
+        respuesta["status"] = "error";
+        respuesta["message"] = "Número insuficiente de argumentos.";
+        return respuesta.dump();
+    }
+
+    // Determinar la ruta dependiendo de si el archivo está en un directorio o en la raíz
+    if (Argumentos.size() == 3) // Archivo en la raíz
+    {
+        file_path = fs::path("simp-db") / "data" / (Argumentos[2] + ".json");
+    }
+    else if (Argumentos.size() == 4) // Archivo dentro de un directorio
+    {
+        file_path = fs::path("simp-db") / "data" / Argumentos[3] / (Argumentos[4] + ".json");
+    }
+    else
+    {
+        respuesta["status"] = "error";
+        respuesta["message"] = "Número inválido de argumentos.";
+        return respuesta.dump();
+    }
+
+    // Verificar si el archivo existe
+    if (!fs::exists(file_path))
+    {
+        respuesta["status"] = "error";
+        respuesta["message"] = "La tabla no existe.";
+        return respuesta.dump();
+    }
+
+    // Leer el contenido del archivo
+    std::ifstream inFile(file_path);
+    if (inFile.is_open())
+    {
+        json contenido;
+        inFile >> contenido; // Cargar el contenido JSON
+        inFile.close();
+
+        respuesta["status"] = "success";
+        respuesta["data"] = contenido; // Incluir los datos obtenidos en la respuesta
+    }
+    else
+    {
+        respuesta["status"] = "error";
+        respuesta["message"] = "No se pudo abrir el archivo para leer.";
+    }
+
     return respuesta.dump();
 }
 
@@ -254,11 +395,24 @@ std::string Eval::evaluar_querry(std::string querry)
     }
     else if (inputs[0] == "ACTUALIZAR")
     {
-        return ACTUALIZAR();
+        return ACTUALIZAR(inputs);
     }
     else if (inputs[0] == "OBTENER")
     {
-        return OBTENER();
+        return OBTENER(inputs);
+    }
+    else if (inputs[0] == "INSERTAR")
+    {
+        if (inputs.size() >= 3)
+        {
+            return INSERTAR(inputs);
+        }
+        else
+        {
+            respuesta["status"] = "error";
+            respuesta["message"] = "Error al crear: Querry (Consultar Querry).";
+            return respuesta.dump();
+        }
     }
     else
     {
