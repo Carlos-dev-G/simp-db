@@ -11,46 +11,47 @@ set(CMAKE_CXX_EXTENSIONS OFF)           # Desactivar extensiones específicas de
 
 # Incluir directorios
 include_directories(include)             # Incluir el directorio de encabezados
-include_directories(${CMAKE_SOURCE_DIR}/path/to/nlohmann_json) # Ruta a la biblioteca de JSON
 
-# Buscar OpenSSL
-find_package(OpenSSL REQUIRED)           # Buscar OpenSSL (REQUIRED significa que es obligatorio)
+# Detectar sistema operativo
+if(WIN32)
+    # Configurar para Windows usando MSYS2
+    add_definitions(-DPLATFORM_WINDOWS)
+    target_link_libraries(simp-db ws2_32)  # Enlazar la biblioteca de sockets de Windows
+elseif(UNIX)
+    # Configurar para Linux usando vcpkg
+    set(CMAKE_TOOLCHAIN_FILE /path/to/vcpkg/scripts/buildsystems/vcpkg.cmake)
 
-# Mostrar rutas de OpenSSL (para verificación)
-message(STATUS "OpenSSL Include Dir: ${OPENSSL_INCLUDE_DIR}")
-message(STATUS "OpenSSL Libraries: ${OPENSSL_LIBRARIES}")
+    # Buscar OpenSSL
+    find_package(OpenSSL REQUIRED)           # Buscar OpenSSL
+    message(STATUS "OpenSSL Include Dir: ${OPENSSL_INCLUDE_DIR}")
+    message(STATUS "OpenSSL Libraries: ${OPENSSL_LIBRARIES}")
+
+    # Buscar nlohmann-json
+    find_package(nlohmann_json CONFIG REQUIRED)  # Buscar nlohmann-json
+endif()
 
 # Agregar las bibliotecas
-add_library(help_menu src/help_menu.cpp)  # Crear la biblioteca help_menu
-add_library(init src/comp/init.cpp)        # Crear la biblioteca init
-add_library(hash_tool src/hash/hash_tool.cpp)  # Crear la biblioteca hash_tool
-add_library(server src/server/server.cpp)   # Crear la biblioteca server
-add_library(eval src/eval/eval.cpp)   # Crear la biblioteca eval
+add_library(help_menu src/help_menu.cpp)
+add_library(init src/comp/init.cpp)
+add_library(hash_tool src/hash/hash_tool.cpp)
+add_library(server src/server/server.cpp)
+add_library(eval src/eval/eval.cpp)
 
 # Vincular OpenSSL a hash_tool
 target_link_libraries(hash_tool OpenSSL::SSL OpenSSL::Crypto)
 
 # Crear el ejecutable
-add_executable(simp-db src/main.cpp)      # Crear el ejecutable con el nombre "simp-db"
+add_executable(simp-db src/main.cpp)
 
-# Vincular las bibliotecas al ejecutable
-target_link_libraries(simp-db help_menu init hash_tool server eval)
+# Vincular las bibliotecas y nlohmann-json al ejecutable
+target_link_libraries(simp-db help_menu init hash_tool server eval nlohmann_json::nlohmann_json)
 
-if(WIN32)
-    # Opciones específicas para Windows
-    add_definitions(-DPLATFORM_WINDOWS)
-    target_link_libraries(simp-db ws2_32)  # Enlazar la biblioteca de sockets de Windows
-elseif(UNIX)
-    # Opciones específicas para Linux
-    add_definitions(-DPLATFORM_UNIX)
+# Vincular pthread en Linux
+if(UNIX)
+    target_link_libraries(simp-db pthread)
 endif()
 
-# Agregar rutas adicionales si es necesario para OpenSSL en Windows
-if(WIN32)
-    include_directories(${OPENSSL_INCLUDE_DIR})
-    target_link_libraries(simp-db ${OPENSSL_LIBRARIES})
-endif()
-
+# Otras opciones específicas
 if(MINGW)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static")
 endif()
